@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List Trainer</title>
+
+
+    <th:block layout:fragment="style">
+
+        <!--        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" th:href="@{/css/fresher.css}">
+        <link rel="stylesheet" th:href="@{/css/paging.css}">
+    </th:block>
+
+</head>
+<body>
+<div layout:fragment="content">
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Trainers</h6>
+        </div>
+        <div class="card-body" >
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="float-right mr-3">
+                        <a href="/admin/add-trainer" class="btn btn-primary btn-icon-split mb-4">
+                        <span class="icon text-white-50">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        </span>
+                            <span class="text">Create Trainer</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive pl-3 pr-3">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>City</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Telephone</th>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <tbody style="text-align: center">
+                            <tr th:if="${trainers.empty}">
+                                <td colspan="7"> No Trainer Available </td>
+                            </tr>
+
+                            <tr th:each ="user: ${trainers}">
+                                <td th:utext="${user.firstname}"></td>
+                                <td th:utext="${user.lastname}"></td>
+                                <td th:utext="${user.city.cityName}"></td>
+                                <td th:utext="${user.username}"></td>
+                                <td th:utext="${user.email}"></td>
+                                <td th:utext="${user.telephone}"></td>
+                                <td>
+                                    <a th:href="@{'/admin/edit-trainer/'+${user.userId}}"
+                                       class="btn btn-warning btn-circle btn-sm pr-1">
+                                        <span class="icon text-white-50"><i class="fas fa-edit"></i></span>
+                                    </a>
+                                    <a href="#" th:onclick="javascript:validateFunc2(/*[[${user.userId}]]*/)"
+                                       class="btn btn-danger btn-circle btn-sm">
+                                        <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+<th:block layout:fragment="script">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/js/fresher.js"></script>
+</th:block>
+</body>
+</html>

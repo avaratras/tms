@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+
+    <th:block layout:fragment="style">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/fresher.css}">
+        <link rel="stylesheet" th:href="@{/css/paging.css}">
+    </th:block>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Trainees</h6>
+        </div>
+        <div class="card-body" >
+
+            <div class="row">
+                <div class="col-md-6 pl-4">
+                    <div class="input-group mb-3">
+                        <div class="autocomplete">
+                            <div class="input-group">
+                                <input class="form-control bg-light border-0 small" type="text" id="searchInput"
+                                       placeholder="Search for username..." aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                        <div class="input-group-append">
+                            <button th:onclick="javascript:searchByUsername()" class="btn btn-primary" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="float-right mr-3">
+                        <a href="/admin/trainee/getFromAddFresher" class="btn btn-primary btn-icon-split mb-4">
+                        <span class="icon text-white-50">
+                        <i class="fas fa-users"></i>
+                        </span>
+                            <span class="text">Create Trainee</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 pl-4 pr-4">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr class="info">
+                            <th>Username</th>
+                            <th>Last name</th>
+                            <th>First name</th>
+                            <th>Email</th>
+                            <th>Telephone</th>
+                            <th>City</th>
+                            <th></th>
+                        </tr>
+                        </thead >
+                        <tbody style="text-align: center">
+                        <tr th:if="${fresherList.empty}">
+                            <td colspan="8"> No Trainee Available </td>
+                        </tr>
+                        <tr th:each="fresher: ${fresherList}" th:id="${fresher.username}">
+                            <td th:utext="${fresher.username}"></td>
+                            <td th:utext="${fresher.lastname}"></td>
+                            <td th:utext="${fresher.firstname}"></td>
+                            <td th:utext="${fresher.email}"></td>
+                            <td th:utext="${fresher.telephone}"></td>
+                            <td th:utext="${fresher.city.cityName}"></td>
+                            <td>
+                                <a th:href="@{'/admin/trainee/edit-fresher/'+${fresher.userId}}"
+                                   class="btn btn-warning btn-circle btn-sm pr-1">
+                                    <span class="icon text-white-50"><i class="fas fa-edit"></i></span>
+                                </a>
+
+                                <a href="#" th:onclick="javascript:validateFunc(/*[[${fresher.userId}]]*/)"
+                                   class="btn btn-danger btn-circle btn-sm ">
+                                    <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-right pr-2">
+                        <!--Pagination-->
+                        <div th:if="${listPages.size() > 0}">
+                            <ul class="pagination justify-content-center pt-0 pb-0">
+                                <li class="page-item">
+                                    <a class="page-link" th:href="@{/admin/trainee/get(page=${currentPage>1 ? currentPage-1 : '1'},name=${param.name})}"
+                                       tabindex="-1">Previous</a>
+                                </li>
+                                <th th:each="pageNumber : ${listPages}">
+                                    <li class="page-item" th:if="${pageNumber < 3}" id="${pageNumber}">
+                                        <a class="page-link" th:href="@{/admin/trainee/get(page=${pageNumber},name=${param.name})}"
+                                           th:utext="${pageNumber}"></a>
+                                    </li>
+                                </th>
+                                <li class="page-item" th:if="${listPages.size() > 3}" style="width: 10%">
+                                    <input id="txtPage" class="page-link" type="text" style="width: 100%" placeholder="..."
+                                           th:onkeydown="javascript:handleKeyPress(event)"/>
+                                </li>
+                                <li class="page-item" th:if="${listPages.size() >2}">
+                                    <a class="page-link" th:href="@{/admin/trainee/get(page=${listPages.size()},name=${param.name})}"
+                                       th:utext="${listPages.size()}"></a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" th:href="@{/admin/trainee/get(page=${currentPage < listPages.size() ? currentPage+1 : currentPage}
+                        ,name=${param.name})}" tabindex="-1">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</div>
+
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/jquery.twbsPagination.min.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script th:inline="javascript">
+
+        function handleKeyPress(e) {
+            var input = document.getElementById('txtPage').value;
+            var key=e.keyCode || e.which;
+            if(key == 13) {
+                if(input.length>0 && !input.empty) {
+                    if(input <= [[${listPages.size()}]]) {
+                       document.location.href = '/admin/trainee/get?page='+ input + '&name='
+                    }
+                    else alert('The last page is '+[[${listPages.size()}]])
+                }
+            }
+        }
+        </script>
+    <script type="text/javascript" src="/js/fresher.js"></script>
+</th:block>
+
+</body>
+</html>

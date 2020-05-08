@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Trainer</title>
+
+    <th:block layout:fragment="style">
+<!--        <link th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet">-->
+<!--        <link th:href="@{/css/style.css}" rel="stylesheet">-->
+        <link th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+    <div layout:fragment="content">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Registration Trainer</h6>
+            </div>
+            <div class="card-body" >
+                <div class="row">
+                    <div class="offset-sm-3 col-md-6 pl-3 pr-3">
+                        <form class="form-horizontal" role="form" th:action="@{/admin/add-trainer}" method="post" th:object="${trainer}">
+                            <div class="form-group">
+                                <label for="firstName" class="col-sm-5 control-label">First Name *</label>
+                                <div class="col-sm-12">
+                                    <input type="text" id="firstName" th:field="*{firstname}"  placeholder="First Name" required class="form-control" name="firstname"/>
+                                    <p class="error-message"   th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></p>
+                                    <p id="firstname-message"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" class="col-sm-3 control-label">Last Name *</label>
+                                <div class="col-sm-12">
+                                    <input type="text" id="lastName" placeholder="Last Name" required th:field="*{lastname}" class="form-control" name="lastname"/>
+                                    <p class="error-message" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></p>
+                                    <p id="lastname-message"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="firstName" class="col-sm-5 control-label">Username *</label>
+                                <div class="col-sm-12">
+                                    <input type="text" id="username" placeholder="Username"  th:field="*{username}" required
+                                           class="form-control" name="username">
+                                    <p class="error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</p>
+                                    <p id="username-message"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-3 control-label">Password*</label>
+                                <div class="col-sm-12">
+                                    <input type="password" id="password" required placeholder="Password" th:field="*{password}" class="form-control">
+                                    <p class="error-message"  th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</p>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="re-password" class="col-sm-5 control-label">Confirm Password*</label>
+                                <div class="col-sm-12">
+                                    <input type="password" id="re-password" placeholder="Password" required class="form-control">
+                                    <p id="password-message"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-sm-3 control-label">Email* </label>
+                                <div class="col-sm-12">
+                                    <input type="email" id="email" placeholder="Email" required th:field="*{email}" class="form-control"
+                                           name="email">
+                                    <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</p>
+                                    <p id="email-message"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="birthDate" class="col-sm-5 control-label">Date of Birth</label>
+                                <div class="col-sm-12">
+                                    <input type="date" id="birthDate" th:field="*{birthday}" class="form-control" name="birthdate">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phonenumber" class="col-sm-5 control-label">Phone number * </label>
+                                <div class="col-sm-12">
+                                    <input type="text" id="phonenumber" required th:field="*{telephone}" placeholder="Phone number" class="form-control" name="telephone">
+                                    <p class="error-message" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}">Name error</p>
+                                    <p id="phonenumber-message"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address" class="col-sm-5 control-label">Address *</label>
+                                <div class="col-sm-12">
+                                    <select th:field="*{city.cityId}" id="address"  class="form-control">
+                                        <option th:each="i : ${cities}" th:value="${i.cityId}" th:text="${i.cityName}" name="city"></option>
+                                    </select>
+                                    <p class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Name error</p>
+                                </div>
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <div class="col-sm-9 col-sm-offset-3">
+                                    <span class="help-block">*Required fields</span>
+                                </div>
+                            </div>
+                            <button type="submit" id="submit" class="btn btn-primary btn-block">Register</button>
+                        </form> <!-- /form -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--Js-->
+
+<th:block layout:fragment="script">
+    <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+
+</th:block>
+
+</body>
+</html>

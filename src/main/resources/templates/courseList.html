@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<!-- Content Wrapper -->
+<div layout:fragment="content">
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Courses</h6>
+        </div>
+        <div class="card-body" >
+
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <div class="float-right mr-3">
+                        <a href="/admin/courses/create" class="btn btn-primary btn-icon-split mb-4">
+                        <span class="icon text-white-50">
+                        <i class="fas fa-book-open"></i>
+                        </span>
+                            <span class="text">Create course</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive pl-3 pr-3">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Course name</th>
+                                <th scope="col">Start date</th>
+                                <th scope="col">End date</th>
+                                <th scope="col">Command</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody" >
+                            <tr style="text-align: center">
+                                <td colspan="7"> No Course Available </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="float-right mr-3">
+                        <ul id="pagination" class="pagination"></ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="viewCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Course View</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 pl-3 pr-3">
+                            <form method="post" id="courseForm" novalidate >
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="courseName">Course name:</label>
+                                        <input id="courseName" name="courseName" class="form-control" type="text" readonly >
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="description">Description:</label>
+                                        <textarea id="description" name="description"  style="height: auto;" class="form-control" readonly></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="trainee">Trainees:</label>
+                                        <select id="trainee" name="traineeId" multiple class="form-control" readonly data-size="4" ></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="startDate">Start date:</label>
+                                        <input  id="startDate" class="form-control" name="startDate" type="date" readonly>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="endDate">End date:</label>
+                                        <input id="endDate" type="date" name="endDate" class="form-control" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label>Subject</label>
+                                        <button class="ml-2 btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#subjectCollapse" aria-expanded="false" aria-controls="subjectCollapse">
+                                            View
+                                        </button>
+                                        <label>
+                                            <span id="totalSubject"></span>
+                                        </label>
+                                        <div class="collapse mt-2" id="subjectCollapse">
+                                            <div class="card card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="table-responsive pl-3 pr-3">
+                                                            <table class="table table-bordered table-hover">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th scope="col">Subject name</th>
+                                                                    <th scope="col">Duration</th>
+                                                                    <th scope="col">Category</th>
+                                                                    <th scope="col">Trainers</th>
+                                                                    <th scope="col">Start date</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="subject-tbody">
+                                                                    <tr style="text-align: center">
+                                                                        <td colspan="7"> No Subject Available </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="float-right mr-3">
+                                                            <ul id="subjectPagination" class="pagination mb-0"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/course.js}"></script>
+    <script th:src="@{/js/jquery.twbsPagination.min.js}"></script>
+</th:block>
+
+</body>
+
+</html>
